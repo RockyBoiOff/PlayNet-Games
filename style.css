@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap");
+
+body {
+  margin: 0;
+  color: white;
+  font-family: "Open Sans";
+  font-size: 30px;
+  cursor: pointer;
+}
+
+
+#results, #instructions {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  max-height: 100vh;
+  max-width: 100vw;
+  background-color: rgba(20, 20, 20, 0.75);
+}
+
+a:visited {
+  color: inherit;
+}
+
+#results {
+  display: none;
+  cursor: default;
+}
+
+#results .content,
+#instructions .content {
+  max-width: 67vw;
+  padding: 50px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+#score {
+  position: absolute;
+  color: white;
+  font-size: 4em;
+  font-weight: bold;
+  top: 30px;
+  right: 30px;
+  font-family: "Wallpoet";
+}
+.dare{
+  font-family: "Metal Mania";
+  font-size: 1.8em;
+}
+.starter, .starter2{
+  font-family: "Wallpoet";
+  font-size: 1.1em;
+
+}
+.starter2{
+  margin-bottom: 0;
+  margin-top: 2em;
+  font-size: 1.5em;
+}
+.title{
+  background-image: linear-gradient(to left, purple, blue, green, yellow, orange, red);
+  background-clip: content-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 4em;
+  font-family: "Tilt Prism";
+  /* text-shadow: 1px 1px 20px black; */
+}
