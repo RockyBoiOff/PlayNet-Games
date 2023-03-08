@@ -210,6 +210,7 @@ var bgsound = new Howl({
   src: ['./assets/audi-v8-acceleration-sound-6067.m4a'],
   autoplay: false,
   loop: true,
+  preload: true,
   volume: 1,
 });
 
@@ -1104,7 +1105,8 @@ function hitDetection() {
 
   //if the game ends then what needs to occur?
   var sound = new Howl({
-    src: ['./assets/car-crash-sound-eefect.m4a']
+    src: ['./assets/car-crash-sound-eefect.m4a'],
+    preload: true,
   });
   if (hit) {
     bgsound.stop();

@@ -104,12 +104,22 @@ function increaseSpeed(){
     }
     console.log(speed);
 }
+var sound = new Howl({
+  src: ['./assets/Mr.Bean The animated series theme song.mp3'],
+  autoplay: false,
+  loop: true,
+  preload: true,
+  volume: 1,
+});
+
+
 function startGame() {
   autopilot = false;
   gameEnded = false;
   lastTime = 0;
   stack = [];
   overhangs = [];
+  sound.play();
 
 
   if (instructionsElement) instructionsElement.style.display = "none";
@@ -226,6 +236,7 @@ window.addEventListener("keydown", function (event) {
   if (event.shiftKey) {
     event.preventDefault();
     speed = 0.005;
+    sound.pause();
     startGame();
     return;
   }
