@@ -1,30 +1,4 @@
-
-/*
-
-Three.js + Cannon.js video tutorial explaining the source code
-
-Youtube: https://youtu.be/hBiGFpBle7E
-SkillShare: https://skl.sh/3uREVvq 
-
-In the tutorial, we go through the source code of this game. We cover, how to set up a Three.js scene with box objects, how to add lights, how to set up the camera, how to add animation and event handlers, and finally, we add physics simulation with Cannon.js.
-
-Comparing to the tutorial this version has some extra features: 
-- autopilot mode before the game starts
-- introduction and result screens
-- score indicator showing the level of layers added
-- you can also control the game with touch events and by pressing the space key
-- you can reset the game
-- the game stops once a block went over the stack
-- once the game failed the last block falls down
-- the game reacts to window resizing
-
-Check out my YouTube channel for other game tutorials: https://www.youtube.com/channel/UCxhgW0Q5XLvIoXHAfQXg9oQ
-
-*/
-
 window.focus(); // Capture keys right away (by default focus is on editor)
-// import eparser from './app';
-// const eparser = require('./app');
 let camera, scene, renderer; // ThreeJS globals
 let world; // CannonJs world
 let lastTime; // Last timestamp of animation
@@ -35,6 +9,7 @@ const originalBoxSize = 3; // Original width and height of a box
 let autopilot;
 let gameEnded;
 let robotPrecision; // Determines how precise the game is on autopilot
+let speed = 0.005;
 
 const scoreElement = document.getElementById("score");
 const instructionsElement = document.getElementById("instructions");
@@ -44,7 +19,7 @@ init();
 
 // Determines how precise the game is on autopilot
 function setRobotPrecision() {
-  robotPrecision = Math.random() * 1 - 0.5;
+  robotPrecision = Math.random() * 1 - 0.5; //can change by formulating the 2nd value
 }
 
 function init() {
@@ -68,7 +43,7 @@ function init() {
 
   camera = new THREE.OrthographicCamera(
     width / -2, // left
-    width / 2, // right
+    width / 2, // riimage.pngght
     height / 2, // top
     height / -2, // bottom
     0, // near plane
@@ -110,7 +85,25 @@ function init() {
   renderer.setAnimationLoop(animation);
   document.body.appendChild(renderer.domElement);
 }
-
+function increaseSpeed(){
+  // while (scoreElement.innerText >= 0 ){
+        if (scoreElement.innerText <= 5){
+      speed = speed + 0.00005;
+    }
+    else if( scoreElement.innerText > 5 && scoreElement.innerText <=15){
+      speed = speed + 0.000075;
+    }
+    else if ( scoreElement.innerText > 15 && scoreElement.innerText <= 25){
+      speed = speed + 0.0001;
+    }
+    else if ( scoreElement.innerText > 25 && scoreElement.innerText <= 40){
+      speed = speed + 0.00015;
+    }
+    else if (scoreElement.innerText > 40){
+      speed = speed + 0.0002;
+    }
+    console.log(speed);
+}
 function startGame() {
   autopilot = false;
   gameEnded = false;
@@ -118,9 +111,11 @@ function startGame() {
   stack = [];
   overhangs = [];
 
+
   if (instructionsElement) instructionsElement.style.display = "none";
-  if (resultsElement) resultsElement.style.display = "none";
+  if (resultsElement) resultsElement.style.opacity = "0";
   if (scoreElement) scoreElement.innerText = 0;
+
 
   if (world) {
     // Remove every object from world
@@ -138,6 +133,7 @@ function startGame() {
 
     // Foundation
     addLayer(0, 0, originalBoxSize, originalBoxSize);
+
 
     // First layer
     addLayer(-10, 0, originalBoxSize, originalBoxSize, "x");
@@ -213,25 +209,23 @@ function cutBox(topLayer, overlap, size, delta) {
   );
   topLayer.cannonjs.shapes = [];
   topLayer.cannonjs.addShape(shape);
-// }
-// if (eparser== "H"){
-//   eventHandler()
 }
 //---------------------Commented controls below for starting game----------------
 // window.addEventListener("mousedown", eventHandler);
-// window.addEventListener("touchstart", eventHandler);
+window.addEventListener("touchstart", eventHandler);
 
 window.addEventListener("keydown", function (event) {
-  if (event.key == " ") {
+  if (event.key == "ArrowUp" || event.key == " ") {
     event.preventDefault();
     eventHandler();
     return;
   }
   
-  // if (event.key == "R" || event.key == "r" || event.shiftKey) {
+// if (event.key == "R" || event.key == "r" || event.shiftKey) {
 
   if (event.shiftKey) {
     event.preventDefault();
+    speed = 0.005;
     startGame();
     return;
   }
@@ -239,7 +233,8 @@ window.addEventListener("keydown", function (event) {
 
 function eventHandler() {
   if (autopilot) startGame();
-  else splitBlockAndAddNextOneIfOverlaps();
+  else splitBlockAndAddNextOneIfOverlaps(), 
+  increaseSpeed();
 }
 
 function splitBlockAndAddNextOneIfOverlaps() {
@@ -286,6 +281,7 @@ function splitBlockAndAddNextOneIfOverlaps() {
     addLayer(nextX, nextZ, newWidth, newDepth, nextDirection);
   } else {
     missedTheSpot();
+
   }
 }
 
@@ -301,15 +297,15 @@ function missedTheSpot() {
   );
   world.remove(topLayer.cannonjs);
   scene.remove(topLayer.threejs);
-
+  speed = 0.005;
   gameEnded = true;
-  if (resultsElement && !autopilot) resultsElement.style.display = "flex";
+  if (resultsElement && !autopilot) resultsElement.style.opacity = "100", resultsElement.style.transition = "all 1s ease-in";
 }
 
 function animation(time) {
   if (lastTime) {
     const timePassed = time - lastTime;
-    const speed = 0.008;
+    // speed = 0.01;
 
     const topLayer = stack[stack.length - 1];
     const previousLayer = stack[stack.length - 2];
@@ -352,6 +348,8 @@ function animation(time) {
   }
   lastTime = time;
 }
+
+
 
 function updatePhysics(timePassed) {
   world.step(timePassed / 1000); // Step the physics world
