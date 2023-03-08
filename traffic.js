@@ -44,7 +44,7 @@ const trackColor = "#546E90";
 const edgeColor = "#725F48";
 const treeCrownColor = 0x498c2c;
 const treeTrunkColor = 0x4b3f2f;
-const audiolistener = new THREE.AudioListener();
+// const audiolistener = new THREE.AudioListener();
 
 const wheelGeometry = new THREE.BoxBufferGeometry(12, 33, 12);
 const wheelMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
@@ -125,7 +125,7 @@ const camera = new THREE.OrthographicCamera(
 
 camera.position.set(0, -210, 300);
 camera.lookAt(0, 0, 0);
-camera.add(audiolistener);
+// camera.add(audiolistener);
 
 const scene = new THREE.Scene();
 
@@ -206,6 +206,12 @@ function reset() {
 
   ready = true;
 }
+var bgsound = new Howl({
+  src: ['./assets/audi-v8-acceleration-sound-6067.m4a'],
+  autoplay: false,
+  loop: true,
+  volume: 1,
+});
 
 function startGame() {
   if (ready) {
@@ -214,7 +220,9 @@ function startGame() {
     buttonsElement.style.opacity = 1;
     instructionsElement.style.opacity = 0;
     renderer.setAnimationLoop(animation);
+    bgsound.play();
   }
+
 }
 
 function positionScoreElement() {
@@ -1084,19 +1092,23 @@ function hitDetection() {
   });
 
   //audio
-const sound = new THREE.Audio(audiolistener);
-const audioLoader = new THREE.AudioLoader();
-
+// const sound = new THREE.Audio(audiolistener);
+// const audioLoader = new THREE.AudioLoader();
+    // audioLoader.load( './assets/car-crash-sound-eefect.ogg', function( buffer ) {
+    //   sound.setBuffer( buffer );
+    //   sound.setLoop( false );
+    //   sound.setVolume( 1 );
+    //   sound.play();
+    // });
 
 
   //if the game ends then what needs to occur?
+  var sound = new Howl({
+    src: ['./assets/car-crash-sound-eefect.m4a']
+  });
   if (hit) {
-    audioLoader.load( './assets/car-crash-sound-eefect.ogg', function( buffer ) {
-      sound.setBuffer( buffer );
-      sound.setLoop( false );
-      sound.setVolume( 1 );
-      sound.play();
-    });
+    bgsound.stop();
+    sound.play();
     if (resultsElement) resultsElement.style.opacity = "100",
     resultsElement.style.transition = "all 1s ease-in-out";
     renderer.setAnimationLoop(null); // Stop animation loop
