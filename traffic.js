@@ -206,13 +206,13 @@ function reset() {
 
   ready = true;
 }
-// var bgsound = new Howl({
-//   src: ['./assets/audi-v8-acceleration-sound-6067.m4a'],
-//   autoplay: false,
-//   loop: true,
-//   preload: true,
-//   volume: 1,
-// });
+var bgsound = new Howl({
+  src: ['./assets/audi-v8-acceleration-sound-6067.m4a'],
+  autoplay: false,
+  loop: true,
+  preload: true,
+  volume: 1,
+});
 
 function startGame() {
   if (ready) {
@@ -221,7 +221,7 @@ function startGame() {
     buttonsElement.style.opacity = 1;
     instructionsElement.style.opacity = 0;
     renderer.setAnimationLoop(animation);
-    // bgsound.play();
+    bgsound.play();
   }
 
 }
@@ -1104,13 +1104,13 @@ function hitDetection() {
 
 
   //if the game ends then what needs to occur?
-  // var csound = new Howl({
-  //   src: ['./assets/Car Crash Sound Effect.mp3'],
-  //   preload: true,
-  // });
+  var csound = new Howl({
+    src: ['./assets/Car Crash Sound Effect.mp3'],
+    preload: true,
+  });
   if (hit) {
-    // bgsound.stop();
-    // csound.play();
+    bgsound.stop();
+    csound.play();
     if (resultsElement) resultsElement.style.opacity = "100",
     resultsElement.style.transition = "all 1s ease-in-out";
     renderer.setAnimationLoop(null); // Stop animation loop
